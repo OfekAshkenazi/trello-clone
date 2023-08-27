@@ -1,3 +1,4 @@
+import Board from "@/components/board";
 import Header from "@/components/header";
 
 export default function Home() {
@@ -5,8 +6,9 @@ export default function Home() {
 
     <main>
       <Header/>
-      <h1>Trello 2.0 AI clone</h1>
+
+      <Board />
     </main>
-    
+
   )
 }
