@@ -7,13 +7,30 @@ import Column from "./column";
 
 export default function Board() {
 
-    const [getBoard, board] = useBoardStore((state) => [state.getBoard, state.board])
+    const [getBoard, board, setBoardState] = useBoardStore((state) =>
+        [state.getBoard, state.board, state.setBoardState])
 
     useEffect(() => {
         getBoard()
     }, [getBoard])
 
     const handleOnDragEnd = (result: DropResult) => {
+        const { destination, source, type } = result
+
+        if (!destination) return
+
+        /// for columns changes
+        if (type === "column") {
+            const entries = Array.from(board.columns.entries())
+            const [removed] = entries.splice(source.index, 1)
+            entries.splice(destination.index, 0, removed)
+            const reRangedColumns = new Map(entries)
+            setBoardState({ ...board, columns: reRangedColumns })
+        }
+
+        const coulmns = Array.from(board.columns)
+        const startColIndex = coulmns[Number(source.droppableId)]
+        const finishColIndex = coulmns[Number(destination.droppableId)]
 
     }
 

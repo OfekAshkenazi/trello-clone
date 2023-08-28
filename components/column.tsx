@@ -59,7 +59,7 @@ export default function Column({ id, todos, index }: Props) {
 
                                     <div className="flex itmes-end justify-end p-2">
                                         <button className="text-green-500 hover:text-green-600">
-                                            <PlusCircleIcon className="h-10 w-10"/>
+                                            <PlusCircleIcon className="h-10 w-10" />
                                         </button>
                                     </div>
 
