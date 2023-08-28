@@ -19,7 +19,6 @@ export default function Board() {
 
         if (!destination) return
 
-        /// for columns changes
         if (type === "column") {
             const entries = Array.from(board.columns.entries())
             const [removed] = entries.splice(source.index, 1)
@@ -31,6 +30,56 @@ export default function Board() {
         const coulmns = Array.from(board.columns)
         const startColIndex = coulmns[Number(source.droppableId)]
         const finishColIndex = coulmns[Number(destination.droppableId)]
+
+        const startCol: Column = {
+            id: startColIndex[0],
+            todos: startColIndex[1].todos
+        }
+
+        const finishCol: Column = {
+            id: finishColIndex[0],
+            todos: finishColIndex[1].todos
+        }
+
+        if (!startCol || !finishCol) return
+
+        if (source.index === destination.index && startCol === finishCol) return
+
+        const newTodos = startCol.todos
+        const [todoMoved] = newTodos.splice(source.index, 1)
+
+        if (startCol.id === finishCol.id) {
+            /// same column task drag
+            newTodos.splice(destination.index, 0, todoMoved)
+            const newCol = {
+                id: startCol.id,
+                todos: newTodos
+            }
+
+            const newColumns = new Map(board.columns)
+            newColumns.set(startCol.id, newCol)
+
+            setBoardState({ ...board, columns: newColumns })
+
+        } else {
+            /// draging to anthor column
+            const finishTodos = Array.from(finishCol.todos)
+            finishTodos.splice(destination.index, 0, todoMoved)
+
+            const newColumns = new Map(board.columns)
+            const newCol = {
+                id: startCol.id,
+                todos: newTodos
+            }
+
+            newColumns.set(startCol.id, newCol)
+            newColumns.set(finishCol.id, {
+                id: finishCol.id,
+                todos: finishTodos
+            })
+
+            setBoardState({ ...board, columns: newColumns })
+        }
 
     }
 
