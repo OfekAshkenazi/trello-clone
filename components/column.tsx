@@ -1,6 +1,7 @@
 import { Draggable, Droppable } from "react-beautiful-dnd";
 import TodoCard from "./todoCard";
 import { PlusCircleIcon } from "@heroicons/react/24/solid";
+import { useBoardStore } from "@/store/BoardStore";
 
 type Props = {
     id: TypedColumn,
@@ -17,6 +18,9 @@ const idToColumnText: {
 }
 
 export default function Column({ id, todos, index }: Props) {
+
+    const [searchString] = useBoardStore((state) => [state.searchString])
+
     return (
         <Draggable draggableId={id} index={index}>
             {(provided) => (
@@ -40,20 +44,24 @@ export default function Column({ id, todos, index }: Props) {
 
                                 <div className="space-y-2">
 
-                                    {todos.map((todo, index) => (
-                                        <Draggable key={todo.$id} draggableId={todo.$id} index={index}>
-                                            {(provided) => (
-                                                <TodoCard
-                                                    todo={todo}
-                                                    index={index}
-                                                    id={id}
-                                                    innerRef={provided.innerRef}
-                                                    draggableProps={provided.draggableProps}
-                                                    dragHandleProps={provided.dragHandleProps}
-                                                />
-                                            )}
-                                        </Draggable>
-                                    ))}
+                                    {todos.map((todo, index) => {
+                                        if (searchString && !todo.title.toLocaleLowerCase().includes(searchString.toLocaleLowerCase())) return null
+
+                                        return (
+                                            <Draggable key={todo.$id} draggableId={todo.$id} index={index}>
+                                                {(provided) => (
+                                                    <TodoCard
+                                                        todo={todo}
+                                                        index={index}
+                                                        id={id}
+                                                        innerRef={provided.innerRef}
+                                                        draggableProps={provided.draggableProps}
+                                                        dragHandleProps={provided.dragHandleProps}
+                                                    />
+                                                )}
+                                            </Draggable>
+                                        )
+                                    })}
 
                                     {provided.placeholder}
 
