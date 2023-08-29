@@ -3,9 +3,10 @@ import { Fragment } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { useModalStore } from '@/store/ModalStore'
 import { useBoardStore } from '@/store/BoardStore'
+import TaskTypeRadioGroup from './taskTypeRadioGroup'
 
 export default function Modal() {
-    
+
     const [newTaskInput, setNewTaskInput] = useBoardStore((state) => [state.newTaskInput, state.setNewTaskInput])
     const [isOpen, closeModal] = useModalStore((state) => [state.isOpen, state.closeModal])
 
@@ -59,6 +60,8 @@ export default function Modal() {
                                     />
 
                                 </div>
+
+                                <TaskTypeRadioGroup />
 
                             </Dialog.Panel>
 

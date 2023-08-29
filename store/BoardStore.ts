@@ -11,16 +11,19 @@ interface BoardState {
     setSearchString: (searchString: string) => void;
     deleteTask: (taskIndex: number, todoId: Todo, id: TypedColumn) => void;
     newTaskInput: string;
-    setNewTaskInput: (input:string) => void;
+    setNewTaskInput: (input: string) => void;
+    newTaskType: TypedColumn;
+    setNewTaskType: (columnId: TypedColumn) => void;
+
 }
 
 export const useBoardStore = create<BoardState>((set, get) => ({
+    
     board: {
         columns: new Map<TypedColumn, Column>()
     },
 
     searchString: "",
-    newTaskInput: "",
     setSearchString: (searchString) => set({ searchString }),
 
     getBoard: async () => {
@@ -48,9 +51,9 @@ export const useBoardStore = create<BoardState>((set, get) => ({
         newColumns.get(id)?.todos.splice(taskIndex, 1)
 
         // optimstic way
-        set({board: {columns: newColumns}})
+        set({ board: { columns: newColumns } })
 
-        if(todo.image) {
+        if (todo.image) {
             await storage.deleteFile(todo.image.bucketId, todo.image.fileId)
         }
 
@@ -61,8 +64,12 @@ export const useBoardStore = create<BoardState>((set, get) => ({
         )
 
     },
-    
-    setNewTaskInput: (input:string) => set({newTaskInput: input}),
-    
+
+    newTaskInput: "",
+    setNewTaskInput: (input: string) => set({ newTaskInput: input }),
+
+    newTaskType: "todo",
+    setNewTaskType: (columnId: TypedColumn) => set({ newTaskType: columnId }),
+
 }))
 
