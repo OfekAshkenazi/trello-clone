@@ -4,6 +4,8 @@ import { Dialog, Transition } from '@headlessui/react'
 import { useModalStore } from '@/store/ModalStore'
 import { useBoardStore } from '@/store/BoardStore'
 import TaskTypeRadioGroup from './taskTypeRadioGroup'
+import Image from 'next/image'
+import { PhotoIcon } from '@heroicons/react/24/solid'
 
 export default function Modal() {
 
@@ -67,7 +69,32 @@ export default function Modal() {
 
                                 <TaskTypeRadioGroup />
 
-                                <div className="">
+                                <div className="my-2">
+
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            imagePickerRef.current?.click()
+                                        }}
+                                        className="w-full border border-gray-300 rounded-md outline-none p-5 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 "
+                                    >
+                                        <PhotoIcon className='h-6 w-6 mr-2 inline-block' />
+                                        Upload Image
+                                    </button>
+
+                                    {image && (
+                                        <Image
+                                            src={URL.createObjectURL(image)}
+                                            alt="Uploaded Image"
+                                            width={200}
+                                            height={200}
+                                            className="w-full h-44 object-cover mt-2 filter hover:grayscale transition-all duration-150 cursor-not-allowed"
+                                            onClick={() => {
+                                                setImage(null)
+                                            }}
+                                        />
+                                    )}
+
                                     <input
                                         type="file"
                                         ref={imagePickerRef}
