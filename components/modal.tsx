@@ -9,7 +9,7 @@ import { PhotoIcon } from '@heroicons/react/24/solid'
 
 export default function Modal() {
 
-    const [newTaskInput, setNewTaskInput] = useBoardStore((state) => [state.newTaskInput, state.setNewTaskInput])
+    const [newTaskInput, setNewTaskInput, newTaskType] = useBoardStore((state) => [state.newTaskInput, state.setNewTaskInput, state.newTaskType])
     const [image, setImage] = useBoardStore((state) => [state.image, state.setImage])
     const addTask = useBoardStore((state) => state.addTask)
 
@@ -22,7 +22,7 @@ export default function Modal() {
 
         if (!newTaskInput) return
 
-
+        addTask(newTaskInput, newTaskType, image)
 
         setImage(null)
         closeModal()
