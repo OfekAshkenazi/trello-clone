@@ -1,5 +1,5 @@
 'use client'
-import { Fragment } from 'react'
+import { Fragment, useRef } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { useModalStore } from '@/store/ModalStore'
 import { useBoardStore } from '@/store/BoardStore'
@@ -8,7 +8,11 @@ import TaskTypeRadioGroup from './taskTypeRadioGroup'
 export default function Modal() {
 
     const [newTaskInput, setNewTaskInput] = useBoardStore((state) => [state.newTaskInput, state.setNewTaskInput])
+    const [image, setImage] = useBoardStore((state) => [state.image, state.setImage])
+
     const [isOpen, closeModal] = useModalStore((state) => [state.isOpen, state.closeModal])
+
+    const imagePickerRef = useRef<HTMLInputElement>(null)
 
     return (
         <Transition appear show={isOpen} as={Fragment}>
@@ -62,6 +66,19 @@ export default function Modal() {
                                 </div>
 
                                 <TaskTypeRadioGroup />
+
+                                <div className="">
+                                    <input
+                                        type="file"
+                                        ref={imagePickerRef}
+                                        hidden
+                                        onChange={(e) => {
+                                            if (!e.target.files![0].type.startsWith("image/")) return
+                                            setImage(e.target.files![0])
+                                        }}
+                                    />
+
+                                </div>
 
                             </Dialog.Panel>
 

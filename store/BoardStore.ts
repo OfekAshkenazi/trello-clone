@@ -6,32 +6,40 @@ interface BoardState {
     board: Board;
     getBoard: () => void;
     setBoardState: (board: Board) => void;
+
     upDateTodoInDB: (todo: Todo, columnId: TypedColumn) => void;
+
     searchString: string;
     setSearchString: (searchString: string) => void;
+
     deleteTask: (taskIndex: number, todoId: Todo, id: TypedColumn) => void;
+
     newTaskInput: string;
     setNewTaskInput: (input: string) => void;
+
     newTaskType: TypedColumn;
     setNewTaskType: (columnId: TypedColumn) => void;
+
+    image: File | null;
+    setImage: (image: File | null) => void;
 
 }
 
 export const useBoardStore = create<BoardState>((set, get) => ({
-    
+
     board: {
         columns: new Map<TypedColumn, Column>()
     },
-
-    searchString: "",
-    setSearchString: (searchString) => set({ searchString }),
-
+    
     getBoard: async () => {
         const board = await getTodosGroupedByColumns()
         set({ board })
     },
 
     setBoardState: (board) => set({ board }),
+
+    searchString: "",
+    setSearchString: (searchString) => set({ searchString }),
 
     upDateTodoInDB: async (todo, columnId) => {
         await databases.updateDocument(
@@ -70,6 +78,9 @@ export const useBoardStore = create<BoardState>((set, get) => ({
 
     newTaskType: "todo",
     setNewTaskType: (columnId: TypedColumn) => set({ newTaskType: columnId }),
+
+    image: null,
+    setImage: (image: File | null) => set({image}),
 
 }))
 
