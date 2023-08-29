@@ -32,8 +32,6 @@ export default function Header() {
 
     }, [board])
 
-
-
     return (
         <header>
 
