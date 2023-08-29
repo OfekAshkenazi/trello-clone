@@ -1,5 +1,5 @@
 'use client'
-import { Fragment, useRef } from 'react'
+import { FormEvent, Fragment, useRef } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { useModalStore } from '@/store/ModalStore'
 import { useBoardStore } from '@/store/BoardStore'
@@ -11,14 +11,31 @@ export default function Modal() {
 
     const [newTaskInput, setNewTaskInput] = useBoardStore((state) => [state.newTaskInput, state.setNewTaskInput])
     const [image, setImage] = useBoardStore((state) => [state.image, state.setImage])
+    const addTask = useBoardStore((state) => state.addTask)
 
     const [isOpen, closeModal] = useModalStore((state) => [state.isOpen, state.closeModal])
 
     const imagePickerRef = useRef<HTMLInputElement>(null)
 
+    function handleSubmit(e: FormEvent<HTMLFormElement>) {
+        e.preventDefault()
+
+        if (!newTaskInput) return
+
+
+
+        setImage(null)
+        closeModal()
+    }
+
     return (
         <Transition appear show={isOpen} as={Fragment}>
-            <Dialog as="form" onClose={closeModal} className="relative z-10" >
+            <Dialog
+                as="form"
+                onClose={closeModal}
+                className="relative z-10"
+                onSubmit={handleSubmit}
+            >
 
                 <Transition.Child
                     as={Fragment}
@@ -105,6 +122,16 @@ export default function Modal() {
                                         }}
                                     />
 
+                                </div>
+
+                                <div>
+                                    <button
+                                        className="inline-flex justify-center rounded-md border border-transparent bg-blue-100
+                                        px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none
+                                        focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:bg-gray-100
+                                        disabled:text-gray-300 disabled:cursor-not-allowed">
+                                        Add Task
+                                    </button>
                                 </div>
 
                             </Dialog.Panel>
